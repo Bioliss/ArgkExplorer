@@ -2,15 +2,15 @@
 #
 # ライブラリ等使用時にライセンス条項を記載する箇所
 
-"""RTすべきツイートを学習するための情報を登録する
+"""RTすべきツイートを学習するための情報をDBに登録する
 
 DBに記録されたRT済みツイートがHomeTLから削除されていた場合、RTすべきでなかったツイートである旨DBに登録する
 DBに記録されていないツイートがHomeTLに存在した場合、RTすべきツイートである旨DBに登録する
 """
 
-# json設定ファイルの読み込み
+# json形式の設定ファイルを読み込み
 if ReadConfig(False) == False:
-    print("json設定ファイルの読み込みに失敗しました")
+    print("json形式の設定ファイル読み込みに失敗しました")
     return
 
 # RTすべきでなかったツイートの登録
@@ -28,9 +28,9 @@ for sRTInfo in GetTWIDFromTL()
         print("失敗 : SetNeeded()")
 
 def ReadConfig(blTestFlg: bool) -> bool:
-"""json設定ファイルの読み込み
+"""json形式の設定ファイルを読み込み
 
-Twitter API や DB へアクセスするためのアカウント情報が記載されたjson設定ファイルを読み込む
+Twitter API や DB へアクセスするためのアカウント情報が記載されたjson形式の設定ファイルを読み込む
 
 Arguments:
     blTestFlg {bool} -- テスト用アカウント使用時 : True
@@ -94,7 +94,7 @@ def SetNeeded(sRTInfo: list) -> bool:
 """RTすべきツイートである旨DBに登録する
 
 Arguments:
-    sRTID {str} -- 登録対象のツイート情報
+    sRTID {list} -- 登録対象のツイート情報
 
 Returns:
     bool -- DB更新成功 : True / DB更新失敗 : False
