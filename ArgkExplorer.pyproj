@@ -19,8 +19,8 @@
     <VisualStudioVersion Condition=" '$(VisualStudioVersion)' == '' ">10.0</VisualStudioVersion>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Module\Analysis\AnalysisHomeTL.py" />
     <Compile Include="Module\Analysis\AnalysisTW.py" />
+    <Compile Include="Module\Analysis\AnalyzeHomeTL.py" />
     <Compile Include="Module\Get\GetSearchTW.py" />
     <Compile Include="Module\Get\GetTVInfo.py" />
     <Compile Include="Module\Get\GetUserFV.py" />
