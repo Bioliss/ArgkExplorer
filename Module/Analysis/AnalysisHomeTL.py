@@ -8,25 +8,6 @@ DBに記録されたRT済みツイートがHomeTLから削除されていた場�
 DBに記録されていないツイートがHomeTLに存在した場合、RTすべきツイートである旨DBに登録する
 """
 
-# json形式の設定ファイルを読み込み
-if ReadConfig(False) == False:
-    print("json形式の設定ファイル読み込みに失敗しました")
-    return
-
-# RTすべきでなかったツイートの登録
-for sRTInfo in GetRTIDFromDB()
-    if ChkRTIDFromDB(sRTInfo["id_str"] ) == True:
-        continue
-    if SetUnNeeded(sRTInfo["id_str"] ) == False:
-        print("失敗 : SetUnNeeded(" + sRTInfo["id_str"]  + ")")
-
-# RTすべきツイートの登録
-for sRTInfo in GetTWIDFromTL()
-    if ChkRTIDFromTL(sRTInfo["id_str"]) == True:
-        continue
-    if SetNeeded(sRTInfo) == False:
-        print("失敗 : SetNeeded()")
-
 def ReadConfig(blTestFlg: bool) -> bool:
 """json形式の設定ファイルを読み込み
 
@@ -99,3 +80,26 @@ Arguments:
 Returns:
     bool -- DB更新成功 : True / DB更新失敗 : False
 """
+
+def main():
+    # json形式の設定ファイルを読み込み
+    if ReadConfig(False) == False:
+        print("json形式の設定ファイル読み込みに失敗しました")
+        return
+
+    # RTすべきでなかったツイートの登録
+    for sRTInfo in GetRTIDFromDB()
+        if ChkRTIDFromDB(sRTInfo["id_str"] ) == True:
+            continue
+        if SetUnNeeded(sRTInfo["id_str"] ) == False:
+            print("失敗 : SetUnNeeded()")
+
+    # RTすべきツイートの登録
+    for sRTInfo in GetTWIDFromTL()
+        if ChkRTIDFromTL(sRTInfo["id_str"]) == True:
+            continue
+        if SetNeeded(sRTInfo) == False:
+            print("失敗 : SetNeeded()")
+
+if __name__ == '__main__':
+    main()
