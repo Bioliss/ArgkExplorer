@@ -39,6 +39,14 @@ def set_tweet_info(status: list) -> bool:
         bool -- DBへの登録成功 : True / 失敗 : False
     """
 
+def get_gakilar_id_from_db() -> list:
+    """ガキラーさんリストの取得
+    DBに登録されたユーザ情報の内ガキラーさんのユーザ情報を抽出
+
+    Returns:
+        list -- Twitter ユーザID
+    """
+
 def main():
     print('このスクリプトは、他のモジュールから呼び出す想定のスクリプトです。')
 

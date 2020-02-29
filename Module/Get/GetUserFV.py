@@ -8,14 +8,6 @@
 """
 import GetCommon
 
-def get_gakilar_id_from_db() -> list:
-    """ガキラーさんリストの取得
-    DBに登録されたユーザ情報の内ガキラーさんのユーザ情報を抽出
-
-    Returns:
-        list -- Twitter ユーザID
-    """
-
 def get_gakilar_fav(str_gakilar_id: str) -> list:
     """ガキラーさんがいいねしたツイートを取得
 
@@ -32,7 +24,7 @@ def main():
         print("json形式の設定ファイル読み込みに失敗しました")
         return
 
-    for str_galilar_id in get_gakilar_id_from_db():
+    for str_galilar_id in GetCommon.get_gakilar_id_from_db():
         for list_status in get_gakilar_fav(str_galilar_id):
             if GetCommon.set_tweet_info(list_status) == False:
                 continue

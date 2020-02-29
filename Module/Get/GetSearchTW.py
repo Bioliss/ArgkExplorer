@@ -10,12 +10,9 @@ DBに登録された新垣結衣さんに関する様々なキーワードでツ
 
 import GetCommon
 
-def gen_query(list_keyword: list) -> list:
+def gen_query() -> list:
     """検索クエリの生成
     一度に複数キーワードで検索するための処理
-
-    Arguments:
-        list_keyword {list} -- DBから取得したキーワードのリスト
 
     Returns:
         list -- 検索文字列のリスト
@@ -49,7 +46,7 @@ def main():
         return
 
     for list_status in get_search_tweets(gen_query()):
-        if Common.set_tweet_info(list_status) == False:
+        if GetCommon.set_tweet_info(list_status) == False:
             continue
         if set_user_info(list_status) == False:
             continue
