@@ -7,55 +7,44 @@
 DBに記録されたツイート情報をもとに、
 RTすべきでないツイートとRTすべきツイートを分類するためのfastText用モデルデータを作成する
 """
-
-def read_config(bl_test_flg: bool) -> bool:
-"""json形式の設定ファイルを読み込み
-
-Twitter API や DB へアクセスするためのアカウント情報が記載されたjson形式の設定ファイルを読み込む
-
-Arguments:
-    bl_test_flg {bool} -- テスト用アカウント使用時 : True
-
-Returns:
-    bool -- 成功 : True / 失敗 : False
-"""
+import AnalyzeCommon
 
 def get_tw_from_db(str_db_field : str) -> list:
-  """DBからツイートを取得
-  
-  Arguments:
-      str_db_field {string} -- RTすべきでないツイートとRTすべきツイートの識別子
-  
-  Returns:
-      list -- SQLの応答データ
-  """
-  cursor.execute(str_sql)
-  return cursor.fetchall()
+    """DBからツイートを取得
+    
+    Arguments:
+        str_db_field {string} -- RTすべきでないツイートとRTすべきツイートの識別子
+    
+    Returns:
+        list -- SQLの応答データ
+    """
+    cursor.execute(str_sql)
+    return cursor.fetchall()
 
 def get_surfaces(list_sql_ret :list) -> list:
-  """ツイートを分かち書きし単語単位に分割
-  
-  Arguments:
-      list_sql_ret {list} -- DBから取得したツイート情報
-  
-  Returns:
-      list -- 分かち書きされたツイート文
-  """
-  list_results = []
-  for list_sql_record in list_sql_ret:
-    str_tweet = list_sql_record[0]
-    str_tweet = format_text(str_tweet)
-    tagger = MeCab.Tagger('')
-    tagger.parse('')
+    """ツイートを分かち書きし単語単位に分割
+    
+    Arguments:
+        list_sql_ret {list} -- DBから取得したツイート情報
+    
+    Returns:
+        list -- 分かち書きされたツイート文
+    """
+    list_results = []
+    for list_sql_record in list_sql_ret:
+        str_tweet = list_sql_record[0]
+        str_tweet = format_text(str_tweet)
+        tagger = MeCab.Tagger('')
+        tagger.parse('')
 
-    list_surf = []
-    node = tagger.parseToNode(str_tweet)
-    while node:
-      surf.append(node.surface)
-      node = node.next
-      
-    list_results.append(list_surf)
-  return list_results
+        list_surf = []
+        node = tagger.parseToNode(str_tweet)
+        while node:
+        surf.append(node.surface)
+        node = node.next
+        
+        list_results.append(list_surf)
+    return list_results
 
 def write_txt(list_tweet :list, str_db_field :str, obj_file :object):
     """評価モデル用のテキストファイル作成
@@ -108,7 +97,10 @@ def main():
     LIST_DB_FIELD = ["yNeeded", "yUnneed"]
     STR_FILE_NAME = "model.txt"
     obj_file = codecs.open(STR_FILE_NAME, 'w', 'utf-8')
-    read_config()
+    # json形式の設定ファイルを読み込み
+    if AnalyzeCommon.read_config(False) == False:
+        print("json形式の設定ファイル読み込みに失敗しました")
+        return
 
     for str_db_field in LIST_DB_FIELD:
         list_sql_ret = get_tw_from_db(str_db_field)       #ツイートを取得
