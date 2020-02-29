@@ -8,62 +8,77 @@ DBに記録されたツイート情報をもとに、
 RTすべきでないツイートとRTすべきツイートを分類するためのfastText用モデルデータを作成する
 """
 
-def ReadConfig(blTestFlg: bool) -> bool:
+def read_config(bl_test_flg: bool) -> bool:
 """json形式の設定ファイルを読み込み
 
 Twitter API や DB へアクセスするためのアカウント情報が記載されたjson形式の設定ファイルを読み込む
 
 Arguments:
-    blTestFlg {bool} -- テスト用アカウント使用時 : True
+    bl_test_flg {bool} -- テスト用アカウント使用時 : True
 
 Returns:
     bool -- 成功 : True / 失敗 : False
 """
 
-def get_tweet(target):
-  '''
-  tweetLogTBLからツイート取得
-  '''
-  sqlText = 'SELECT textFull from `tweetLogTBL` WHERE ' + target + ' > 80'
-  cursor.execute(sqlText)
+def get_tw_from_db(str_db_field : str) -> list:
+  """DBからツイートを取得
+  
+  Arguments:
+      str_db_field {string} -- RTすべきでないツイートとRTすべきツイートの識別子
+  
+  Returns:
+      list -- SQLの応答データ
+  """
+  cursor.execute(str_sql)
   return cursor.fetchall()
 
-def get_surfaces(contents):
-  '''
-  文書を分かち書きし単語単位に分割
-  '''
-  results = []
-  for i in contents:
-    row = i[0]
-    content = format_text(row)
+def get_surfaces(list_sql_ret :list) -> list:
+  """ツイートを分かち書きし単語単位に分割
+  
+  Arguments:
+      list_sql_ret {list} -- DBから取得したツイート情報
+  
+  Returns:
+      list -- 分かち書きされたツイート文
+  """
+  list_results = []
+  for list_sql_record in list_sql_ret:
+    str_tweet = list_sql_record[0]
+    str_tweet = format_text(str_tweet)
     tagger = MeCab.Tagger('')
     tagger.parse('')
-    surf = []
-    node = tagger.parseToNode(content)
+
+    list_surf = []
+    node = tagger.parseToNode(str_tweet)
     while node:
       surf.append(node.surface)
       node = node.next
-    results.append(surf)
-  return results
+      
+    list_results.append(list_surf)
+  return list_results
 
-def write_txt(contents, target, f):
-    '''
-    評価モデル用のテキストファイルを作成する
-    '''
+def write_txt(list_tweet :list, str_db_field :str, obj_file :object):
+    """評価モデル用のテキストファイル作成
+    
+    Arguments:
+        list_tweet {list} -- 分かち書きされたツイート文
+        target {int} -- RTすべきでないツイートとRTすべきツイートの識別子
+        obj_file {object} -- 評価モデル用のテキストファイル
+    """        
     try:
-        if(len(contents) > 0):
-        labelText = "__label__" + str(target) + ", "
-        for row in contents:
+        if(len(list_tweet) > 0):
+        str_label = "__label__" + str_db_field + ", "
+        for str_tweet in list_tweet:
             # 文字列がほぼなしの場合はSkip
             if( len(row) < 3 ):
             continue
             # 空行区切りの文字列に変換
-            spaceTokens = " ".join(row);
-            result = labelText + spaceTokens + "\n"
+            str_space_separate = " ".join(str_tweet)
+            str_line_text = str_label + str_space_separate + "\n"
             # 書き込み
-            f.write(result.decode('UTF-8'))
+            obj_file.write(str_line_text.decode('UTF-8'))
 
-        print(str(len(contents))+"行を書き込み")
+        print(str(len(list_tweet))+"行を書き込み")
 
     except Exception as e:
         print("テキストへの書き込みに失敗")
@@ -90,20 +105,18 @@ def format_text(text :str) -> str:
     return text.encode('UTF-8', 'ignore')
 
 def main():
-    targetList = ["yNeeded", "yUnneed"]
-    fileName = "model.txt"
-    f = codecs.open(fileName, 'w', 'utf-8')
-    ReadConfig()
+    LIST_DB_FIELD = ["yNeeded", "yUnneed"]
+    STR_FILE_NAME = "model.txt"
+    obj_file = codecs.open(STR_FILE_NAME, 'w', 'utf-8')
+    read_config()
 
-    for target in range(len(targetList)):
-        sqlret = get_tweet(targetList[target]) #ツイートを取得
-        surfaces = get_surfaces(sqlret)        #ツイートを分かち書き
-        write_txt(surfaces, target, f)         #ツイートを書き込み
+    for str_db_field in LIST_DB_FIELD:
+        list_sql_ret = get_tw_from_db(str_db_field)       #ツイートを取得
+        list_surfaces = get_surfaces(list_sql_ret)        #ツイートを分かち書き
+        write_txt(list_surfaces, str_db_field, obj_file)  #ツイートを書き込み
 
-    f.close()
-
-    classifier = ft.supervised(fileNema, "model")   #model.binを作成
+    obj_file.close()
+    ft.supervised(STR_FILE_NAME, "model")                 #model.binを作成
 
 if __name__ == '__main__':
     main()
-
