@@ -18,9 +18,13 @@
         * 特定ユーザのRTを取得する
     * GetUserFV
         * 特定ユーザのいいねを取得する
+    * GetTVInfo
+        * TV情報を取得する
 * Post系
     * PostRT
         * RTすべきと判断したツイートをRTする
+    * PostTVInfo
+        * TV情報をツイートする
     * PostWebInfo
         * Webサイトの更新情報をツイートする
     * PostMagazineInfo
