@@ -33,8 +33,8 @@
         * 記念日をツイートする
     * PostScreenName
         * スクリーンネームを変更する
-* Analysis系
-    * AnalysisHomeTL
+* Analyze系
+    * AnalyzeHomeTL
         * RTすべきツイートを学習する
-    * AnalysisTW
+    * AnalyzeTW
         * ツイートをカテゴライズする
