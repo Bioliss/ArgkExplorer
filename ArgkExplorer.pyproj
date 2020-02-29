@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" DefaultTargets="Build">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{5d4e2fe6-e10c-441e-91cc-be33fcfccedb}</ProjectGuid>
+    <ProjectHome />
+    <StartupFile />
+    <SearchPath />
+    <WorkingDirectory>.</WorkingDirectory>
+    <OutputPath>.</OutputPath>
+    <ProjectTypeGuids>{888888a0-9f3d-457c-b088-3a5042f75d52}</ProjectTypeGuids>
+    <LaunchProvider>Standard Python launcher</LaunchProvider>
+    <InterpreterId>Global|PythonCore|3.6</InterpreterId>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)' == 'Debug'" />
+  <PropertyGroup Condition="'$(Configuration)' == 'Release'" />
+  <PropertyGroup>
+    <VisualStudioVersion Condition=" '$(VisualStudioVersion)' == '' ">10.0</VisualStudioVersion>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="Module\Analysis\AnalysisHomeTL.py" />
+    <Compile Include="Module\Analysis\AnalysisTW.py" />
+    <Compile Include="Module\Get\GetSearchTW.py" />
+    <Compile Include="Module\Get\GetTVInfo.py" />
+    <Compile Include="Module\Get\GetUserFV.py" />
+    <Compile Include="Module\Get\GetUserRT.py" />
+    <Compile Include="Module\Post\PostAnniversary.py" />
+    <Compile Include="Module\Post\PostMagazineInfo.py" />
+    <Compile Include="Module\Post\PostRT.py" />
+    <Compile Include="Module\Post\PostScreenName.py" />
+    <Compile Include="Module\Post\PostTVInfo.py" />
+    <Compile Include="Module\Post\PostWebInfo.py" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Module\" />
+    <Folder Include="Module\Analysis" />
+    <Folder Include="Module\Get" />
+    <Folder Include="Module\Post" />
+  </ItemGroup>
+  <ItemGroup>
+    <InterpreterReference Include="Global|PythonCore|3.6" />
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
+</Project>
