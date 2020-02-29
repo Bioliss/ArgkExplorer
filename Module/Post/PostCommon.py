@@ -19,6 +19,19 @@ def read_config(bl_test_flg: bool) -> bool:
         bool -- 成功 : True / 失敗 : False
     """
 
+def post_tweet(text : str, rep_tweet_id : str = "0") -> bool:
+    """ツイートする
+
+    Arguments:
+        text {str} -- ツイートするテキスト
+
+    Keyword Arguments:
+        rep_tweet_id {str} -- リプライ対象のツイートID  (default: {"0":str})
+
+    Returns:
+        bool -- ツイート成功 : True / 失敗 : False
+    """    
+
 def main():
     print('このスクリプトは、他のモジュールから呼び出す想定のスクリプトです。')
 
